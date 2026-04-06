@@ -70,7 +70,7 @@
 
       <template #footer>
         <el-button @click="dialogVisible=false">取消</el-button>
-        <el-button type="primary" @click="addRecord">保存</el-button>
+        <el-button type="primary" @click="handleAddRecord">保存</el-button>
       </template>
     </el-dialog>
 
@@ -84,11 +84,8 @@
 
         <el-col :span="16">
           <el-input v-model="detailRecord.name"/>
-
           <el-input v-model="detailRecord.tags"/>
-
           <el-input-number v-model="detailRecord.score" :min="0" :max="10"/>
-
           <el-select v-model="detailRecord.status">
             <el-option label="未完成" value="doing"/>
             <el-option label="已完成" value="done"/>
@@ -109,8 +106,8 @@
           />
 
           <div style="margin-top:10px;">
-            <el-button type="primary" @click="saveDetail">保存</el-button>
-            <el-button type="danger" @click="deleteRecord">删除</el-button>
+            <el-button type="primary" @click="handleSaveDetail">保存</el-button>
+            <el-button type="danger" @click="handleDeleteRecord">删除</el-button>
           </div>
         </el-col>
 
@@ -121,8 +118,9 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { getRecords, addRecord, updateRecord, deleteRecord, searchRecords } from '../api/record'
 
 const router = useRouter()
 
@@ -134,6 +132,26 @@ const sortOrder = ref('')
 
 const records = ref([])
 const defaultCover = 'https://via.placeholder.com/150'
+const userId = ref(1) // 假设用户ID为1
+
+// 加载记录数据
+const loadRecords = async () => {
+  try {
+    const res = await getRecords(type.value, userId.value)
+    records.value = Array.isArray(res.data) ? res.data.map(r => ({
+      ...r,
+      statusText: r.status==='done'?'已完成':'未完成',
+      type: type.value
+    })) : []
+  } catch (error) {
+    console.error('加载记录失败:', error)
+    records.value = []
+  }
+}
+
+onMounted(() => {
+  loadRecords()
+})
 
 // 弹窗
 const dialogVisible = ref(false)
@@ -143,38 +161,47 @@ const detailVisible = ref(false)
 const newRecord = ref({})
 const detailRecord = ref({})
 
-// 模拟数据
-records.value = [
-  {id:1,name:'电影A',type:'movie',status:'done',statusText:'已完成',score:9,tags:'动作',cover:'',doneTime:'2026-04-01',comment:''},
-]
-
 // 计算
 const filteredRecords = computed(()=>{
-  return records.value
-    .filter(r=>r.type===type.value)
-    .filter(r=>!statusFilter.value||r.status===statusFilter.value)
-    .filter(r=>!tagFilter.value||r.tags.includes(tagFilter.value))
+  let list = records.value
+  if(statusFilter.value) list = list.filter(r => r.status === statusFilter.value)
+  if(tagFilter.value) list = list.filter(r => r.tags.includes(tagFilter.value))
+  if(sortOrder.value === 'asc') list = list.sort((a,b)=>a.score-b.score)
+  if(sortOrder.value === 'desc') list = list.sort((a,b)=>b.score-a.score)
+  return list
 })
 
 // 方法
-const changeType = (t)=> type.value=t
+const changeType = async (t) => {
+  type.value = t
+  statusFilter.value = ''
+  tagFilter.value = ''
+  sortOrder.value = ''
+  await loadRecords() // 切换类型时重新加载数据
+}
 
 const openDialog = ()=>{
   dialogVisible.value=true
   newRecord.value={status:'doing'}
 }
 
-const addRecord = ()=>{
-  const now = new Date().toLocaleString()
-  records.value.push({
-    ...newRecord.value,
-    id: Date.now(),
-    type: type.value,
-    statusText: newRecord.value.status==='done'?'已完成':'未完成',
-    doneTime: newRecord.value.status==='done'? now:'',
-    comment:''
-  })
-  dialogVisible.value=false
+const handleAddRecord = async () => {
+  try {
+    const res = await addRecord(type.value, {
+      ...newRecord.value,
+      statusText: newRecord.value.status==='done'?'已完成':'未完成',
+      comment: ''
+    })
+    if(typeof res.data === 'string' && res.data.includes('成功')){
+      await loadRecords()
+      dialogVisible.value=false
+    } else {
+      alert('添加失败')
+    }
+  } catch (error) {
+    console.error('添加记录失败:', error)
+    dialogVisible.value=false
+  }
 }
 
 const viewRecord = (r)=>{
@@ -182,15 +209,34 @@ const viewRecord = (r)=>{
   detailVisible.value=true
 }
 
-const saveDetail = ()=>{
-  const i = records.value.findIndex(r=>r.id===detailRecord.value.id)
-  records.value[i] = {...detailRecord.value}
-  detailVisible.value=false
+const handleSaveDetail = async () => {
+  try {
+    const res = await updateRecord(type.value, detailRecord.value.id, detailRecord.value)
+    if(typeof res.data === 'string' && res.data.includes('成功')){
+      await loadRecords()
+      detailVisible.value=false
+    } else {
+      alert('更新失败')
+    }
+  } catch (error) {
+    console.error('更新记录失败:', error)
+    detailVisible.value=false
+  }
 }
 
-const deleteRecord = ()=>{
-  records.value = records.value.filter(r=>r.id!==detailRecord.value.id)
-  detailVisible.value=false
+const handleDeleteRecord = async () => {
+  try {
+    const res = await deleteRecord(type.value, detailRecord.value.id)
+    if(typeof res.data === 'string' && res.data.includes('成功')){
+      await loadRecords()
+      detailVisible.value=false
+    } else {
+      alert('删除失败')
+    }
+  } catch (error) {
+    console.error('删除记录失败:', error)
+    detailVisible.value=false
+  }
 }
 
 // 上传
@@ -207,14 +253,20 @@ const handleDetailUpload = (file)=>{
 }
 
 // 搜索
-const searchByName = ()=>{
-  const res = records.value.filter(r=>r.name.includes(keyword.value))
-  alert(res.map(r=>r.name).join('\n'))
+const searchByName = async () => {
+  try {
+    const res = await searchRecords(keyword.value)
+    if(res.data.code===200){
+      alert(res.data.data?.map(r=>r.name).join('\n') || '未找到相关记录')
+    }
+  } catch (error) {
+    console.error('搜索失败:', error)
+    const res = records.value.filter(r=>r.name.includes(keyword.value))
+    alert(res.map(r=>r.name).join('\n'))
+  }
 }
 
-const logout = ()=>{
-  router.push('/login')
-}
+const logout = ()=> router.push('/login')
 </script>
 
 <style scoped>

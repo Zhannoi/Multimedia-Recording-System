@@ -33,6 +33,7 @@ const login = async () => {
     })
 
     if (res.data.code === 200) {
+      // 后端返回的是User对象，可以存储id或username作为token
       localStorage.setItem('token', res.data.data.id || res.data.data.username)
       alert('登录成功')
       router.push('/home')
