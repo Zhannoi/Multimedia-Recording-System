@@ -33,7 +33,7 @@ export const addRecord = (type, data) => {
 }
 
 // 更新记录
-export const updateRecord = (type, id, data) => {
+export const updateRecord = (type, data) => {
   switch(type) {
     case 'movie':
       return request.put('/movie/update', data)
@@ -64,7 +64,7 @@ export const deleteRecord = (type, id) => {
   }
 }
 
-// 搜索记录
-export const searchRecords = (keyword) => {
-  return request.get('/record/search', { params: { keyword } })
+// 按名字搜索所有类型记录
+export const searchAllRecords = (keyword, userId) => {
+  return request.get('/record/search', { params: { keyword, userId } });
 }
