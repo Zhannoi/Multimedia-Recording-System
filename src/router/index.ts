@@ -9,6 +9,7 @@ const routes = [
   { path: '/', redirect: '/login' },
   { path: '/login', component: Login },
   { path: '/register', component: Register },
+  {path: '/admin',component: () => import('../views/Admin.vue')},
   { path: '/home', component: Home }
 ]
 

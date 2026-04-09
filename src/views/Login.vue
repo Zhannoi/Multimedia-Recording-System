@@ -8,6 +8,8 @@
 
       <button @click="login" class="btn">登录</button>
 
+      <button @click="adminLogin" class="btn admin-btn">管理员登录</button>
+
       <p class="switch-text">
         没有账号？
         <span @click="goRegister">去注册</span>
@@ -33,7 +35,7 @@ const login = async () => {
     })
 
     if (res.data.code === 200) {
-      // ⭐ 存储完整用户对象
+      //  存储完整用户对象
       const user = res.data.data
       localStorage.setItem('user', JSON.stringify(user))
 
@@ -44,6 +46,29 @@ const login = async () => {
     }
   } catch (e) {
     alert('请求失败')
+    console.error(e)
+  }
+}
+
+//  管理员登录（新增）
+const adminLogin = async () => {
+  try {
+    const res = await request.post('/admin/login', {
+      username: username.value,
+      password: password.value
+    })
+
+    if (res.data.code === 200) {
+      const admin = res.data.data
+      localStorage.setItem('admin', JSON.stringify(admin))
+
+      alert('管理员登录成功')
+      router.push('/admin')  //  跳管理员页面
+    } else {
+      alert(res.data.msg)
+    }
+  } catch (e) {
+    alert('管理员登录失败')
     console.error(e)
   }
 }
@@ -134,5 +159,14 @@ const goRegister = () => {
 
 .switch-text span:hover {
   text-decoration: underline;
+}
+
+.admin-btn {
+  margin-top: 10px;
+  background: #ff4d4f;
+}
+
+.admin-btn:hover {
+  background: #d9363e;
 }
 </style>
