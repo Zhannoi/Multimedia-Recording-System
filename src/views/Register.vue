@@ -50,7 +50,7 @@ const goLogin = () => {
 </script>
 
 <style scoped>
-/* 和 Login.vue 完全一样，可以复用 CSS */
+/* 整体居中 */
 .auth-container {
   display: flex;
   justify-content: center;
@@ -60,59 +60,72 @@ const goLogin = () => {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* 卡片 */
 .auth-card {
-  background: #fff;
+  background: rgba(255, 255, 255, 0.95);
   padding: 40px 30px;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  width: 320px;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  width: 360px;
   text-align: center;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+/* 标题 */
 .title {
   margin-bottom: 30px;
   color: #333;
-  font-size: 28px;
+  font-size: 32px;
   font-weight: bold;
+  background: linear-gradient(135deg, #6b73ff, #000dff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
+/* 输入框 */
 .input {
-  width: 100%;
-  padding: 12px 10px;
+  width: 90%;
+  padding: 14px 16px;
   margin-bottom: 20px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
   font-size: 16px;
   outline: none;
   transition: all 0.3s;
+  background: rgba(255, 255, 255, 0.8);
 }
 
 .input:focus {
   border-color: #6b73ff;
-  box-shadow: 0 0 8px rgba(107, 115, 255, 0.3);
+  box-shadow: 0 0 12px rgba(107, 115, 255, 0.3);
+  transform: translateY(-2px);
 }
 
+/* 按钮 */
 .btn {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   border: none;
-  border-radius: 8px;
-  background: #6b73ff;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #6b73ff, #4f5fff);
   color: #fff;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s;
+  margin-bottom: 12px;
 }
 
 .btn:hover {
-  background: #4f5fff;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  background: linear-gradient(135deg, #5a62ff, #3f4fff);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(107, 115, 255, 0.4);
 }
 
+/* 切换文字 */
 .switch-text {
-  margin-top: 15px;
+  margin-top: 20px;
   font-size: 14px;
   color: #555;
 }
@@ -121,9 +134,11 @@ const goLogin = () => {
   color: #6b73ff;
   cursor: pointer;
   font-weight: bold;
+  transition: all 0.3s;
 }
 
 .switch-text span:hover {
   text-decoration: underline;
+  color: #4f5fff;
 }
 </style>

@@ -64,7 +64,7 @@
     <!-- 添加记录弹窗 -->
     <el-dialog v-model="dialogVisible" title="添加记录">
       <el-input v-model="newRecord.name" placeholder="名称"/>
-      <el-input v-model="newRecord.tags" placeholder="标签"/>
+      <el-input v-model="newRecord.tags" placeholder="标签（多个标签用空格隔开）"/>
       <el-input-number v-model="newRecord.score" :min="0" :max="10"/>
       <el-select v-model="newRecord.status">
         <el-option label="未完成" value="doing"/>
@@ -148,7 +148,7 @@ const tagFilter = ref('')
 const sortOrder = ref('')
 const defaultCover = 'https://via.placeholder.com/150'
 
-// ⭐ 从 localStorage 获取登录用户
+// 从 localStorage 获取登录用户
 const storedUser = localStorage.getItem('user')
 const currentUser = ref(storedUser ? JSON.parse(storedUser) : null)
 
@@ -178,7 +178,7 @@ const loadRecords = async () => {
 
 onMounted(loadRecords)
 
-// ⭐ 计算属性：筛选 + 排序
+// 计算属性：筛选 + 排序
 const filteredRecords = computed(() => {
   let list = [...records.value]
   if (statusFilter.value) list = list.filter(r => r.status === statusFilter.value)
@@ -288,10 +288,99 @@ const logout = () => {
 </script>
 
 <style scoped>
-.home { background:#f5f5f5; min-height:100vh; }
-.main { display:flex; }
-.sidebar { width:220px; padding:10px; }
-.content { flex:1; padding:20px; }
-.cover { width:100%; height:180px; object-fit:cover; }
-.detail-img { width:100%; height:250px; object-fit:cover; }
+.home { 
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.main { 
+  display: flex; 
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  gap: 20px;
+}
+.sidebar { 
+  width: 250px; 
+  padding: 0;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  height: fit-content;
+  position: sticky;
+  top: 20px;
+}
+.content { 
+  flex: 1; 
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+}
+.cover { 
+  width: 100%; 
+  height: 200px; 
+  object-fit: cover;
+  border-radius: 12px 12px 0 0;
+  transition: transform 0.3s ease;
+}
+.detail-img { 
+  width: 100%; 
+  height: 280px; 
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+:deep(.el-menu) {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  margin: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+:deep(.el-card) {
+  border-radius: 12px;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+:deep(.el-card:hover) {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+:deep(.el-button) {
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+:deep(.el-button:hover) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+:deep(.el-dialog) {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+:deep(.el-input__wrapper) {
+  border-radius: 8px;
+}
+
+h4 {
+  color: #333;
+  font-weight: 600;
+  margin: 12px 0;
+}
+
+p {
+  color: #666;
+  font-size: 14px;
+}
 </style>

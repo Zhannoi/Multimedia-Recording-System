@@ -134,14 +134,27 @@ onMounted(loadUsers)
 <style scoped>
 .admin {
   padding: 20px;
-  background: #f5f5f5;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.header h2 {
+  margin: 0;
+  color: #333;
+  font-size: 24px;
+  font-weight: 600;
 }
 
 .right {
@@ -149,9 +162,58 @@ onMounted(loadUsers)
   gap: 10px;
 }
 
+:deep(.el-card) {
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+}
+
+:deep(.el-table) {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+:deep(.el-button) {
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+:deep(.el-button:hover) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+:deep(.el-dialog) {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
 .cover {
   width: 100%;
   height: 150px;
   object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+h3 {
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+h4 {
+  color: #333;
+  font-weight: 600;
+  margin: 12px 0 8px;
+}
+
+p {
+  color: #666;
+  font-size: 14px;
+  margin: 8px 0;
 }
 </style>
