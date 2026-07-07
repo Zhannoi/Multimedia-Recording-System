@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.media.mapper.MovieMapper">
+
+    <!-- 新增 -->
+    <insert id="insert" parameterType="Movie">
+        INSERT INTO movie
+        (user_id, name, score, tags, status, finish_time, comment, cover, create_time)
+        VALUES
+        (#{userId}, #{name}, #{score}, #{tags}, #{status}, #{finishTime}, #{comment}, #{cover}, NOW())
+    </insert>
+
+    <!-- 查询用户所有记录 -->
+    <select id="findByUserId" resultType="Movie">
+        SELECT * FROM movie
+        WHERE user_id = #{userId}
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- 查询详情 -->
+    <select id="findById" resultType="Movie">
+        SELECT * FROM movie WHERE id = #{id}
+    </select>
+
+    <!-- 更新 -->
+    <update id="update" parameterType="Movie">
+        UPDATE movie
+        SET
+        name = #{name},
+        score = #{score},
+        tags = #{tags},
+        status = #{status},
+        finish_time = #{finishTime},
+        comment = #{comment},
+        cover = #{cover},
+        update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="delete">
+        DELETE FROM movie WHERE id = #{id}
+    </delete>
+
+    <!-- 按名称搜索 -->
+    <select id="findByUserIdAndNameLike" resultType="Movie">
+        SELECT * FROM movie
+        WHERE user_id = #{userId} AND name LIKE #{name}
+        ORDER BY create_time DESC
+    </select>
+
+</mapper>
