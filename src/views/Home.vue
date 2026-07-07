@@ -288,99 +288,314 @@ const logout = () => {
 </script>
 
 <style scoped>
-.home { 
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.home {
+  position: relative;
   min-height: 100vh;
+  overflow: hidden;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-.main { 
-  display: flex; 
+
+/* 背景图 */
+.home::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      rgba(0,0,0,0.25),
+      rgba(0,0,0,0.25)
+    ),
+    url('@/store/bg.png');
+
+  background-size: cover;
+  background-position: center;
+
+  /* 模糊强度 */
+  filter: blur(3px);
+
+  /* 防止模糊后边缘露白 */
+  transform: scale(1.05);
+
+  z-index: -2;
+}
+
+/* 渐变氛围层 */
+.home {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* 背景图 */
+.home::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      rgba(0,0,0,0.25),
+      rgba(0,0,0,0.25)
+    ),
+    url('@/store/bg.png');
+
+  background-size: cover;
+  background-position: center;
+
+  filter: blur(3px);
+
+  transform: scale(1.05);
+
+  z-index: -2;
+}
+
+/* 氛围渐变 */
+.home::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(102, 126, 234, 0.18),
+      rgba(118, 75, 162, 0.18)
+    );
+
+  z-index: -1;
+}
+
+/* 顶部栏（改为基本不透明） */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin: 20px;
+  padding: 18px 28px;
+
+  background: rgba(255,255,255,0.96);
+
+  border-radius: 22px;
+
+  box-shadow:
+    0 6px 24px rgba(0,0,0,0.12);
+
+  border: 1px solid rgba(255,255,255,0.5);
+}
+
+.header h2 {
+  color: #333;
+  font-weight: 700;
+}
+
+/* 主体 */
+.main {
+  display: flex;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 20px;
-  gap: 20px;
+  padding: 0 20px 20px;
+  gap: 24px;
 }
-.sidebar { 
-  width: 250px; 
+
+/* 左侧栏 */
+.sidebar {
+  width: 260px;
   padding: 0;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
+
+  background: rgba(255, 255, 255, 0.16);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  border: 1px solid rgba(255,255,255,0.18);
+
+  border-radius: 24px;
+
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.22);
+
   height: fit-content;
+
   position: sticky;
   top: 20px;
-}
-.content { 
-  flex: 1; 
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
-}
-.cover { 
-  width: 100%; 
-  height: 200px; 
-  object-fit: cover;
-  border-radius: 12px 12px 0 0;
-  transition: transform 0.3s ease;
-}
-.detail-img { 
-  width: 100%; 
-  height: 280px; 
-  object-fit: cover;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  overflow: hidden;
 }
 
+/* 内容区 */
+.content {
+  flex: 1;
+  padding: 28px;
+
+  background: rgba(255, 255, 255, 0.14);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  border: 1px solid rgba(255,255,255,0.16);
+
+  border-radius: 24px;
+
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.22);
+}
+
+/* 封面图 */
+.cover {
+  width: 100%;
+  height: 220px;
+
+  object-fit: cover;
+
+  border-radius: 18px 18px 0 0;
+
+  transition:
+    transform 0.35s ease,
+    filter 0.35s ease;
+}
+
+.cover:hover {
+  transform: scale(1.03);
+  filter: brightness(1.06);
+}
+
+/* 详情图 */
+.detail-img {
+  width: 100%;
+  height: 300px;
+
+  object-fit: cover;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 4px 14px rgba(0, 0, 0, 0.15);
+}
+
+/* 菜单 */
 :deep(.el-menu) {
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px);
-  border-radius: 12px;
-  margin: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: transparent !important;
+  border: none !important;
+  padding: 16px;
 }
 
-:deep(.el-card) {
+:deep(.el-menu-item) {
+  height: 50px;
+  line-height: 50px;
+
   border-radius: 12px;
-  border: none;
+
+  color: rgba(255,255,255,0.88);
+
+  margin-bottom: 8px;
+
   transition: all 0.3s ease;
 }
 
-:deep(.el-card:hover) {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+:deep(.el-menu-item:hover) {
+  background: rgba(255,255,255,0.12) !important;
+  color: #fff;
 }
 
+:deep(.el-menu-item.is-active) {
+  background: rgba(255,255,255,0.2) !important;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* 卡片 */
+:deep(.el-card) {
+  overflow: hidden;
+
+  background: rgba(255,255,255,0.14) !important;
+
+  border: 1px solid rgba(255,255,255,0.14) !important;
+
+  backdrop-filter: blur(18px);
+
+  border-radius: 20px;
+
+  transition: all 0.35s ease;
+
+  box-shadow:
+    0 8px 24px rgba(0,0,0,0.16);
+}
+
+:deep(.el-card:hover) {
+  transform: translateY(-6px);
+
+  box-shadow:
+    0 14px 30px rgba(0,0,0,0.22);
+}
+
+/* 按钮 */
 :deep(.el-button) {
-  border-radius: 8px;
-  font-weight: 500;
+  border-radius: 12px;
+
+  font-weight: 600;
+
+  border: none;
+
   transition: all 0.3s ease;
 }
 
 :deep(.el-button:hover) {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+  box-shadow:
+    0 6px 18px rgba(0,0,0,0.18);
 }
 
+/* 详情弹窗（恢复正常风格，但保留轻微透明） */
 :deep(.el-dialog) {
-  border-radius: 16px;
+  border-radius: 18px !important;
+
   overflow: hidden;
-}
 
-:deep(.el-input__wrapper) {
-  border-radius: 8px;
-}
+  background: rgba(255,255,255,0.96) !important;
 
-h4 {
+  backdrop-filter: blur(8px);
+
   color: #333;
-  font-weight: 600;
-  margin: 12px 0;
+
+  box-shadow:
+    0 10px 36px rgba(0,0,0,0.2);
 }
 
+/* 弹窗标题 */
+:deep(.el-dialog__title) {
+  color: #333;
+  font-weight: 700;
+}
+
+/* 输入框 */
+:deep(.el-input__wrapper) {
+  border-radius: 12px;
+
+  background: rgba(255,255,255,0.85);
+
+  box-shadow: none !important;
+}
+
+/* 输入文字 */
+:deep(.el-input__inner) {
+  color: #333;
+}
+
+/* 标题 */
+h4 {
+  color: white;
+  font-weight: 700;
+  margin: 14px 0;
+}
+
+/* 内容文字 */
 p {
-  color: #666;
+  color: rgb(8, 8, 8);
   font-size: 14px;
+  line-height: 1.7;
 }
 </style>

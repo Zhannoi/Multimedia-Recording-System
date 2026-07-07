@@ -52,12 +52,40 @@ const goLogin = () => {
 <style scoped>
 /* 整体居中 */
 .auth-container {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(135deg, #6b73ff, #000dff);
+  overflow: hidden;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* 背景图层 */
+.auth-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  /* 背景图片 */
+  background: url('@/store/bg.png') center center / cover no-repeat;
+
+  /* 毛玻璃核心 */
+  filter: blur(3px);
+
+  /* 防止模糊后露白边 */
+  transform: scale(1.1);
+
+  z-index: -2;
+}
+
+/* 暗色遮罩层（提升文字可读性） */
+.auth-container::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: -1;
 }
 
 /* 卡片 */
